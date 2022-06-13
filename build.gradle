@@ -1,0 +1,31 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.6.20'
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+jar {
+    //noinspection GroovyAssignabilityCheck
+    manifest {
+        attributes "Main-Class": "main.MainKt"
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlinx:kotlinx-cli:0.3.4"
+    implementation "com.google.firebase:firebase-admin:8.2.0"
+    api 'org.slf4j:slf4j-simple:1.7.36'
+}
+
+test {
+    useJUnitPlatform()
+}
