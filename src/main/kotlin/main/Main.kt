@@ -1,0 +1,58 @@
+package main
+
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.Message
+import kotlinx.cli.ArgParser
+import kotlinx.cli.ArgType
+import kotlinx.cli.required
+import java.io.File
+import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.*
+
+// implementation "com.google.firebase:firebase-admin:8.2.0"
+// implementation "org.jetbrains.kotlinx:kotlinx-cli:0.3.4"
+
+fun main(args: Array<String>) {
+    val parser = ArgParser("TestFcmV1Sender")
+
+    val credentialPath by parser.option(
+        ArgType.String,
+        shortName = "c",
+        description = "path of crecentials.json"
+    ).required()
+
+    val fcmDeviceToken by  parser.option(
+        ArgType.String,
+        shortName = "t",
+        description = "FCM device token"
+    ).required()
+
+    parser.parse(args)
+
+    val credentialFile = File(credentialPath)
+    println("credentialFile=${credentialFile.canonicalPath}")
+
+    val credentials = FileInputStream(credentialFile).use {
+        GoogleCredentials.fromStream(it)
+    }
+
+    val options = FirebaseOptions.builder()
+        .setCredentials(credentials)
+        .build()
+    FirebaseApp.initializeApp(options)
+
+    @Suppress("SpellCheckingInspection")
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+
+    val message: Message = Message.builder().apply {
+        putData( "title", "test")
+        putData( "text", "test ${sdf.format(Date())}")
+    }.setToken(fcmDeviceToken).build()
+
+    val response = FirebaseMessaging.getInstance().send(message)
+    println("response: $response")
+}
