@@ -22,10 +22,10 @@ fun main(args: Array<String>) {
     val credentialPath by parser.option(
         ArgType.String,
         shortName = "c",
-        description = "path of crecentials.json"
+        description = "path to credentials.json"
     ).required()
 
-    val fcmDeviceToken by  parser.option(
+    val fcmDeviceToken by parser.option(
         ArgType.String,
         shortName = "t",
         description = "FCM device token"
@@ -49,8 +49,8 @@ fun main(args: Array<String>) {
     val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
 
     val message: Message = Message.builder().apply {
-        putData( "title", "test")
-        putData( "text", "test ${sdf.format(Date())}")
+        putData("title", "test")
+        putData("text", "test ${sdf.format(Date())}")
     }.setToken(fcmDeviceToken).build()
 
     val response = FirebaseMessaging.getInstance().send(message)
