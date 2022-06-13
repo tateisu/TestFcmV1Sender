@@ -46,9 +46,12 @@ fun main(args: Array<String>) {
     FirebaseApp.initializeApp(options)
 
     @Suppress("SpellCheckingInspection")
-    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+    val sdf = SimpleDateFormat(
+        "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+        Locale.getDefault()
+    )
 
-    val message: Message = Message.builder().apply {
+    val message = Message.builder().apply {
         putData("title", "test")
         putData("text", "test ${sdf.format(Date())}")
     }.setToken(fcmDeviceToken).build()
